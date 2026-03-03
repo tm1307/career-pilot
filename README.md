@@ -1,6 +1,6 @@
 # Career Pilot
 
-**One stop AI-powered career tool** for students - resume analysis, roadmap planning, job discovery, and hackathon tracking, built for the Indian market.
+**One stop AI-powered career tool** for students -- resume analysis, roadmap planning, job discovery, and hackathon tracking, built for the Indian market.
 
 ![React](https://img.shields.io/badge/React-Vite-06b6d4?style=for-the-badge&logo=react)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-22c55e?style=for-the-badge&logo=node.js)
@@ -11,7 +11,7 @@
 ![License](https://img.shields.io/badge/License-MIT-white?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)
 
-### ð Live â [career-pilot-ashy.vercel.app](https://career-pilot-ashy.vercel.app)
+### Live: [career-pilot-ashy.vercel.app](https://career-pilot-ashy.vercel.app)
 
 ---
 
@@ -26,7 +26,7 @@ Most students hit the same wall when starting their career:
 | Career advice is generic, expensive, or inaccessible | Poor interview and application preparation |
 | Hackathons and opportunities scattered across platforms | Missed deadlines, missed chances |
 
-Career Pilot solves all four - free, in one place.
+Career Pilot solves all four -- free, in one place.
 
 ---
 
@@ -34,13 +34,13 @@ Career Pilot solves all four - free, in one place.
 
 | Feature | How it works | Auth |
 |---|---|---|
-| **Opportunities** | Live job listings from the Adzuna API, filterable by role and location | - |
-| **Hackathons** | Aggregates from Unstop, Devpost, Dare2Compete, and MLH - no paid API required | - |
-| **Resume Check** | Upload a PDF; backend extracts text, runs ATS keyword + structure scoring, LLaMA generates targeted feedback | â |
-| **Resume Builder** | Fill in your details; LLaMA returns polished, action-verb-driven bullet points and a professional summary | â |
-| **Roadmap Planner** | Describe your target role and timeline; returns a week-by-week learning plan saved to your profile | â |
-| **AI Guide** | Conversational career counsellor - interview prep, skill gaps, salary negotiation, career pivots | â |
-| **Deadline Tracker** | Client-side deadline management, no backend required | - |
+| **Opportunities** | Live job listings from the Adzuna API, filterable by role and location | No |
+| **Hackathons** | Aggregates from Unstop, Devpost, Dare2Compete, and MLH -- no paid API required | No |
+| **Resume Check** | Upload a PDF; backend extracts text, runs ATS keyword + structure scoring, LLaMA generates targeted feedback | Yes |
+| **Resume Builder** | Fill in your details; LLaMA returns polished, action-verb-driven bullet points and a professional summary | Yes |
+| **Roadmap Planner** | Describe your target role and timeline; returns a week-by-week learning plan saved to your profile | Yes |
+| **AI Guide** | Conversational career counsellor -- interview prep, skill gaps, salary negotiation, career pivots | Yes |
+| **Deadline Tracker** | Client-side deadline management, no backend required | No |
 
 ---
 
@@ -79,7 +79,7 @@ Career Pilot solves all four - free, in one place.
 | Backend | Node.js, Express (ESM) |
 | Database | MongoDB Atlas, Mongoose |
 | Auth | JWT, bcrypt |
-| AI | Groq SDK - LLaMA 3.1 8B Instant |
+| AI | Groq SDK -- LLaMA 3.1 8B Instant |
 | Jobs | Adzuna API |
 | Hackathons | axios + cheerio (web scraping, no paid API) |
 | File Handling | multer, pdf2json |
@@ -91,23 +91,23 @@ Career Pilot solves all four - free, in one place.
 
 ```
 career-pilot/
-âââ backend/
-â   âââ middleware/             # JWT auth guard
-â   âââ models/                 # User, Plan (Mongoose schemas)
-â   âââ routes/                 # One file per feature endpoint
-â   âââ services/
-â   â   âââ llmService.js       # Groq wrapper - shared by all AI routes
-â   â   âââ resumeAnalyzer.js   # Keyword + structure ATS scoring
-â   â   âââ jobFetcher.js       # Adzuna integration
-â   â   âââ hackathonFetcher.js # Scrapes Unstop, Devpost, D2C, MLH
-â   âââ server.js               # Entry point, rate limiters, CORS
-â
-âââ frontend/
-    âââ src/
-        âââ pages/              # One component per feature
-        âââ components/         # AuthModal, ProfileModal
-        âââ context/            # Auth state via React Context
-        âââ App.jsx             # Sidebar shell + tab routing
+|-- backend/
+|   |-- middleware/             # JWT auth guard
+|   |-- models/                 # User, Plan (Mongoose schemas)
+|   |-- routes/                 # One file per feature endpoint
+|   |-- services/
+|   |   |-- llmService.js       # Groq wrapper -- shared by all AI routes
+|   |   |-- resumeAnalyzer.js   # Keyword + structure ATS scoring
+|   |   |-- jobFetcher.js       # Adzuna integration
+|   |   +-- hackathonFetcher.js # Scrapes Unstop, Devpost, D2C, MLH
+|   +-- server.js               # Entry point, rate limiters, CORS
+|
++-- frontend/
+    +-- src/
+        |-- pages/              # One component per feature
+        |-- components/         # AuthModal, ProfileModal
+        |-- context/            # Auth state via React Context
+        +-- App.jsx             # Sidebar shell + tab routing
 ```
 
 ---
@@ -172,22 +172,22 @@ Frontend runs on `http://localhost:5173`.
 
 | Method | Route | Auth | Description |
 |---|---|---|---|
-| POST | `/api/auth/register` | - | Create account |
-| POST | `/api/auth/login` | - | Returns JWT |
-| GET | `/api/jobs` | - | Job listings (Adzuna) |
-| GET | `/api/hackathons` | - | Hackathon listings (scraped) |
-| POST | `/api/resume` | â | PDF upload â ATS score + feedback |
-| POST | `/api/builder/generate` | â | AI-generated resume content |
-| POST | `/api/planner` | â | Career roadmap |
-| POST | `/api/guide` | â | AI career chat |
+| POST | `/api/auth/register` | No | Create account |
+| POST | `/api/auth/login` | No | Returns JWT |
+| GET | `/api/jobs` | No | Job listings (Adzuna) |
+| GET | `/api/hackathons` | No | Hackathon listings (scraped) |
+| POST | `/api/resume` | Yes | PDF upload -- ATS score + feedback |
+| POST | `/api/builder/generate` | Yes | AI-generated resume content |
+| POST | `/api/planner` | Yes | Career roadmap |
+| POST | `/api/guide` | Yes | AI career chat |
 
-**Rate limits** - 200 req / 15 min globally Â· 30 req / 15 min on auth routes Â· 15 req / 1 min on AI routes
+**Rate limits** -- 200 req / 15 min globally, 30 req / 15 min on auth routes, 15 req / 1 min on AI routes
 
-### Example - Resume Check
+### Example -- Resume Check
 
 ```bash
-curl -X POST http://localhost:5001/api/resume \\
-  -H "Authorization: Bearer <token>" \\
+curl -X POST http://localhost:5001/api/resume \
+  -H "Authorization: Bearer <token>" \
   -F "resume=@your_resume.pdf"
 ```
 
@@ -208,17 +208,17 @@ curl -X POST http://localhost:5001/api/resume \\
 
 ## Usage Guide
 
-**Resume Check** - Upload a PDF. The backend extracts text, scores it against ATS keyword patterns, and LLaMA returns specific improvement suggestions.
+**Resume Check** -- Upload a PDF. The backend extracts text, scores it against ATS keyword patterns, and LLaMA returns specific improvement suggestions.
 
-**Resume Builder** - Enter your role, education, experience, projects, and skills. LLaMA generates action-verb bullet points and a professional summary ready to copy.
+**Resume Builder** -- Enter your role, education, experience, projects, and skills. LLaMA generates action-verb bullet points and a professional summary ready to copy.
 
-**Roadmap Planner** - Describe your goal and timeline (e.g. *"Beginner to Data Science internship in 3 months"*). Returns a week-by-week plan with topics, tasks, and resources, saved to your profile.
+**Roadmap Planner** -- Describe your goal and timeline (e.g. "Beginner to Data Science internship in 3 months"). Returns a week-by-week plan with topics, tasks, and resources, saved to your profile.
 
-**AI Guide** - Ask anything: interview prep, skill gaps, salary negotiation, career pivots. Powered by LLaMA 3.1 via Groq.
+**AI Guide** -- Ask anything: interview prep, skill gaps, salary negotiation, career pivots. Powered by LLaMA 3.1 via Groq.
 
-**Hackathons** - Browse upcoming hackathons aggregated live from Unstop, Devpost, Dare2Compete, and MLH. Filter by mode (online/offline) and location.
+**Hackathons** -- Browse upcoming hackathons aggregated live from Unstop, Devpost, Dare2Compete, and MLH. Filter by mode (online/offline) and location.
 
-**Deadline Tracker** - Add and track your application deadlines client-side, no account needed.
+**Deadline Tracker** -- Add and track your application deadlines client-side, no account needed.
 
 ---
 
@@ -229,7 +229,7 @@ curl -X POST http://localhost:5001/api/resume \\
 | Frontend | Vercel | career-pilot-ashy.vercel.app |
 | Backend | Render | port 10000 |
 
-Set all environment variables in your host's dashboard. Add the production frontend URL to `ALLOWED_ORIGINS` on the backend.
+Set all environment variables in your host dashboard. Add the production frontend URL to `ALLOWED_ORIGINS` on the backend.
 
 ---
 
@@ -257,14 +257,14 @@ Set all environment variables in your host's dashboard. Add the production front
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch - `git checkout -b feature/your-feature`
-3. Commit your changes - `git commit -m "add: your feature"`
-4. Push to the branch - `git push origin feature/your-feature`
+2. Create a feature branch -- `git checkout -b feature/your-feature`
+3. Commit your changes -- `git commit -m "add: your feature"`
+4. Push to the branch -- `git push origin feature/your-feature`
 5. Open a Pull Request
 
 ---
 
 <div align="center">
-  <strong>Career Pilot - Navigate Your Career with AI</strong><br/>
-  Built with React Â· Node.js Â· MongoDB Â· Groq (LLaMA 3.1) Â· Express
+  <strong>Career Pilot -- Navigate Your Career with AI</strong><br/>
+  Built with React | Node.js | MongoDB | Groq (LLaMA 3.1) | Express
 </div>
