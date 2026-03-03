@@ -23,24 +23,32 @@ mongoose
   .catch((err) => console.error("❌ MongoDB error:", err.message));
 
 // ── CORS (must come before everything else) ───────────────────────────────────
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:5173")
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
   .map((o) => o.trim());
 
 app.use(
   cors({
-    origin(origin, cb) {
-      // allow server-to-server / curl / Postman (no Origin header)
-      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-      cb(null, false); // silently reject unknown origins
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      const isAllowed = allowedOrigins.some((allowed) =>
+        origin.startsWith(allowed)
+      );
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
     },
     methods: ["GET", "POST", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
-app.options("*", cors()); // handle preflight for every route
 
+app.options("*", cors());
 // ── Body parsing ──────────────────────────────────────────────────────────────
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
