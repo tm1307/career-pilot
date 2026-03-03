@@ -1,44 +1,146 @@
-# ✈️ Career Pilot
+# Career Pilot
 
-> **One Stop AI-powered career tool** — discover jobs, prep your resume, plan your roadmap, and compete in hackathons, all in one place.
+**One stop AI-powered career tool** for students — resume analysis, roadmap planning, job discovery, and hackathon tracking, built for the Indian market.
 
 ---
 
-## 🚀 Features
+## What It Does
 
-| Module | Description | Auth Required |
+Career Pilot brings everything a student needs into a single dashboard. Public features are available without an account; AI-powered tools unlock after signing in.
+
+| Feature | How it works | Auth |
 |---|---|---|
-| **Opportunities** | Browse live job listings powered by the Adzuna API | No |
-| **Hackathons** | Aggregates listings from Unstop, Devpost, Dare2Compete & MLH | No |
-| **Resume Check** | Upload a PDF resume and get an AI-powered ATS score with feedback | ✅ Yes |
-| **Resume Builder** | AI-assisted resume builder that generates tailored content | ✅ Yes |
-| **Roadmap / Planner** | AI generates a personalized career learning roadmap | ✅ Yes |
-| **AI Guide** | Chat with an AI career counsellor | ✅ Yes |
-| **Deadline Tracker** | Track application deadlines locally | No |
-| **Contact** | Contact form | No |
+| **Opportunities** | Live job listings from the Adzuna API, filterable by role and location | — |
+| **Hackathons** | Aggregates from Unstop, Devpost, Dare2Compete, and MLH — no paid API required | — |
+| **Resume Check** | Upload a PDF; backend extracts text, runs ATS keyword scoring, LLaMA generates targeted feedback | ✓ |
+| **Resume Builder** | Fill in your details; LLaMA returns polished, action-verb-driven bullet points and a professional summary | ✓ |
+| **Roadmap Planner** | Describe your target role and timeline; returns a week-by-week learning plan saved to your profile | ✓ |
+| **AI Guide** | Conversational career counsellor powered by LLaMA 3.1 | ✓ |
+| **Deadline Tracker** | Client-side deadline management, no backend required | — |
 
 ---
 
-## 🛠️ Tech Stack
+## Stack
 
-### Frontend
-- **React 18** with Vite
-- Single-page app with sidebar navigation
-- No external UI libraries — custom CSS
+**Frontend** — React 18, Vite, custom CSS (no component library)
+
+**Backend** — Node.js · Express (ESM) · MongoDB + Mongoose · JWT + bcrypt · Groq SDK (LLaMA 3.1 8B Instant) · Adzuna API · pdf2json · cheerio
+
+---
+
+## Project Structure
+
+```
+career-pilot/
+├── backend/
+│   ├── middleware/             # JWT auth guard
+│   ├── models/                 # User, Plan (Mongoose schemas)
+│   ├── routes/                 # One file per feature endpoint
+│   ├── services/
+│   │   ├── llmService.js       # Groq wrapper — shared by all AI routes
+│   │   ├── resumeAnalyzer.js   # Keyword + structure ATS scoring
+│   │   ├── jobFetcher.js       # Adzuna integration
+│   │   └── hackathonFetcher.js # Scrapes Unstop, Devpost, D2C, MLH
+│   └── server.js               # Entry point, rate limiters, CORS
+│
+└── frontend/
+    └── src/
+        ├── pages/              # One component per feature
+        ├── components/         # AuthModal, ProfileModal
+        ├── context/            # Auth state via React Context
+        └── App.jsx             # Sidebar shell + tab routing
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- MongoDB Atlas cluster
+- [Groq API key](https://console.groq.com/)
+- [Adzuna API credentials](https://developer.adzuna.com/)
 
 ### Backend
-- **Node.js** + **Express** (ESM modules)
-- **MongoDB** via Mongoose
-- **JWT** authentication with bcrypt password hashing
-- **Groq SDK** → LLaMA 3.1 8B Instant for all AI features
-- **Adzuna API** for job listings
-- **pdf2json** + **multer** for PDF resume parsing
-- **axios** + **cheerio** for hackathon scraping (no API keys needed)
-- Rate limiting via `express-rate-limit`
+
+```bash
+cd backend
+npm install
+```
+
+Create `backend/.env`:
+
+```env
+GROQ_API_KEY=
+MONGO_URI=
+JWT_SECRET=          # 32+ random characters
+PORT=5001
+ALLOWED_ORIGINS=http://localhost:5173
+ADZUNA_APP_ID=
+ADZUNA_API_KEY=
+```
+
+> Never commit `.env`. Verify it is in `.gitignore` before pushing.
+
+```bash
+npm run dev     # development (auto-restart)
+npm start       # production
+```
+
+Server runs on `http://localhost:5001`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs on `http://localhost:5173`.
 
 ---
 
-## 📁 Project Structure
+## API Reference
+
+| Method | Route | Auth | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | — | Create account |
+| POST | `/api/auth/login` | — | Returns JWT |
+| GET | `/api/jobs` | — | Job listings (Adzuna) |
+| GET | `/api/hackathons` | — | Hackathon listings (scraped) |
+| POST | `/api/resume` | ✓ | PDF upload → ATS score + feedback |
+| POST | `/api/builder/generate` | ✓ | AI-generated resume content |
+| POST | `/api/planner` | ✓ | Career roadmap |
+| POST | `/api/guide` | ✓ | AI career chat |
+
+**Rate limits** — 200 req / 15 min globally · 30 req / 15 min on auth routes · 15 req / 1 min on AI routes
+
+---
+
+## Deployment
+
+| Layer | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend | Render (port 10000) |
+
+Set all environment variables in your host's dashboard and add the production frontend URL to `ALLOWED_ORIGINS`.
+
+---
+
+## Security
+
+- Passwords hashed with bcrypt (12 rounds)
+- JWT verified server-side on every protected route
+- MongoDB input sanitized via `express-mongo-sanitize`
+- CORS restricted to explicitly allowed origins
+- PDF uploads capped at 5 MB, stored in memory only
+
+---
+
+## Project Structure
 
 ```
 career-pilot/
