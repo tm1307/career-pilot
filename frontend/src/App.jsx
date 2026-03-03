@@ -144,7 +144,7 @@ export default function App() {
         <div className="topbar">
           <div>
             <div className="page-title">{active?.label}</div>
-            <div className="page-sub">AI-powered career tools for Indian students</div>
+            <div className="page-sub">One Stop AI-powered career assistant </div>
           </div>
           <div className="live-dot" title="Live" />
         </div>
