@@ -1,6 +1,6 @@
 # ✈️ Career Pilot
 
-> **AI-powered career tools for Indian students** — discover jobs, prep your resume, plan your roadmap, and compete in hackathons, all in one place.
+> **One Stop AI-powered career tool** — discover jobs, prep your resume, plan your roadmap, and compete in hackathons, all in one place.
 
 ---
 
