@@ -10,6 +10,7 @@ import Planner      from "./pages/Planner.jsx";
 import Guidance     from "./pages/Guidance.jsx";
 import Contact         from "./pages/Contact.jsx";
 import DeadlineTracker from "./pages/DeadlineTracker.jsx";
+import LandingPage     from "./pages/LandingPage.jsx";
 import "./App.css";
 
 /* ── SVG icons — no emojis ───────────────────────────────── */
@@ -73,6 +74,7 @@ export default function App() {
   const [tab, setTab]   = useState("jobs");
   const [auth, setAuth] = useState(false);
   const [prof, setProf] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
 
   if (loading) return (
     <div className="splash">
@@ -90,6 +92,16 @@ export default function App() {
 
   const active = ALL.find((t) => t.id === tab);
 
+  if (showLanding) {
+    return <LandingPage 
+      onEnter={() => setShowLanding(false)} 
+      onSignIn={() => {
+        setShowLanding(false);
+        setTimeout(() => setAuth(true), 10);
+      }}
+    />;
+  }
+
   return (
     <div className="shell">
       {auth && <AuthModal    onClose={() => setAuth(false)} />}
@@ -98,7 +110,7 @@ export default function App() {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark" style={{ color: "var(--teal)" }}>{Icons.plane}</div>
+          <img src="/logo.png" alt="Career Pilot Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
           <span className="brand-name">Career Pilot</span>
         </div>
 
