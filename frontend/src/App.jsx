@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext.jsx";
 import AuthModal    from "./components/AuthModal.jsx";
 import ProfileModal from "./components/ProfileModal.jsx";
@@ -71,10 +72,11 @@ const ALL = NAV.flatMap((g) => g.items);
 
 export default function App() {
   const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [tab, setTab]   = useState("jobs");
   const [auth, setAuth] = useState(false);
   const [prof, setProf] = useState(false);
-  const [showLanding, setShowLanding] = useState(true);
 
   if (loading) return (
     <div className="splash">
@@ -92,85 +94,88 @@ export default function App() {
 
   const active = ALL.find((t) => t.id === tab);
 
-  if (showLanding) {
-    return <LandingPage 
-      onEnter={() => setShowLanding(false)} 
-      onSignIn={() => {
-        setShowLanding(false);
-        setTimeout(() => setAuth(true), 10);
-      }}
-    />;
-  }
-
   return (
-    <div className="shell">
-      {auth && <AuthModal    onClose={() => setAuth(false)} />}
-      {prof && <ProfileModal onClose={() => setProf(false)} />}
+    <Routes>
+      <Route path="/" element={
+        <LandingPage 
+          onEnter={() => navigate("/dashboard")} 
+          onSignIn={() => {
+            navigate("/dashboard");
+            setTimeout(() => setAuth(true), 100);
+          }}
+        />
+      } />
+      <Route path="/dashboard" element={
+        <div className="shell">
+          {auth && <AuthModal    onClose={() => setAuth(false)} />}
+          {prof && <ProfileModal onClose={() => setProf(false)} />}
 
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="brand">
-          <img src="/logo.png" alt="Career Pilot Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
-          <span className="brand-name">Career Pilot</span>
-        </div>
+          {/* Sidebar */}
+          <aside className="sidebar">
+            <div className="brand" onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
+              <img src="/logo.png" alt="Career Pilot Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+              <span className="brand-name">Career Pilot</span>
+            </div>
 
-        <div className="sidebar-body">
-          {NAV.map((g) => (
-            <div key={g.group} className="nav-section">
-              <div className="nav-label">{g.group}</div>
-              {g.items.map((t) => (
-                <button
-                  key={t.id}
-                  className={`nav-item ${tab === t.id ? "active" : ""}`}
-                  onClick={() => nav(t)}
-                  title={t.auth && !user ? `${t.label} · Sign in required` : t.label}
-                >
-                  <span className="nav-icon-wrap">{Icons[t.icon]}</span>
-                  <span className="nav-text">{t.label}</span>
-                  {t.auth && !user && <span className="nav-lock">⚿</span>}
-                </button>
+            <div className="sidebar-body">
+              {NAV.map((g) => (
+                <div key={g.group} className="nav-section">
+                  <div className="nav-label">{g.group}</div>
+                  {g.items.map((t) => (
+                    <button
+                      key={t.id}
+                      className={`nav-item ${tab === t.id ? "active" : ""}`}
+                      onClick={() => nav(t)}
+                      title={t.auth && !user ? `${t.label} · Sign in required` : t.label}
+                    >
+                      <span className="nav-icon-wrap">{Icons[t.icon]}</span>
+                      <span className="nav-text">{t.label}</span>
+                      {t.auth && !user && <span className="nav-lock">⚿</span>}
+                    </button>
+                  ))}
+                </div>
               ))}
             </div>
-          ))}
-        </div>
 
-        <div className="sidebar-foot">
-          {user ? (
-            <div className="user-row">
-              <div className="ava">{user.name?.[0]?.toUpperCase() || "U"}</div>
-              <div className="user-meta">
-                <div className="user-nm">{user.name}</div>
-                <div className="user-em">{user.email}</div>
-              </div>
-              <button className="icon-btn" onClick={() => setProf(true)} title="Profile">{Icons.gear}</button>
-              <button className="icon-btn del" onClick={logout} title="Sign out">{Icons.logout}</button>
+            <div className="sidebar-foot">
+              {user ? (
+                <div className="user-row">
+                  <div className="ava">{user.name?.[0]?.toUpperCase() || "U"}</div>
+                  <div className="user-meta">
+                    <div className="user-nm">{user.name}</div>
+                    <div className="user-em">{user.email}</div>
+                  </div>
+                  <button className="icon-btn" onClick={() => setProf(true)} title="Profile">{Icons.gear}</button>
+                  <button className="icon-btn del" onClick={logout} title="Sign out">{Icons.logout}</button>
+                </div>
+              ) : (
+                <button className="btn-signin" onClick={openAuth}>Sign in →</button>
+              )}
             </div>
-          ) : (
-            <button className="btn-signin" onClick={openAuth}>Sign in →</button>
-          )}
-        </div>
-      </aside>
+          </aside>
 
-      {/* Main */}
-      <div className="main">
-        <div className="topbar">
-          <div>
-            <div className="page-title">{active?.label}</div>
-            <div className="page-sub">One Stop AI-powered career assistant </div>
+          {/* Main */}
+          <div className="main">
+            <div className="topbar">
+              <div>
+                <div className="page-title">{active?.label}</div>
+                <div className="page-sub">One Stop AI-powered career assistant </div>
+              </div>
+              <div className="live-dot" title="Live" />
+            </div>
+            <div className="content">
+              {tab === "jobs"    && <Opportunities />}
+              {tab === "hacks"   && <Hackathons />}
+              {tab === "resume"  && <ResumeCheck  onAuth={openAuth} />}
+              {tab === "builder" && <Builder      onAuth={openAuth} />}
+              {tab === "planner" && <Planner      onAuth={openAuth} />}
+              {tab === "guide"   && <Guidance     onAuth={openAuth} />}
+              {tab === "tracker" && <DeadlineTracker />}
+              {tab === "contact" && <Contact />}
+            </div>
           </div>
-          <div className="live-dot" title="Live" />
         </div>
-        <div className="content">
-          {tab === "jobs"    && <Opportunities />}
-          {tab === "hacks"   && <Hackathons />}
-          {tab === "resume"  && <ResumeCheck  onAuth={openAuth} />}
-          {tab === "builder" && <Builder      onAuth={openAuth} />}
-          {tab === "planner" && <Planner      onAuth={openAuth} />}
-          {tab === "guide"   && <Guidance     onAuth={openAuth} />}
-          {tab === "tracker" && <DeadlineTracker />}
-          {tab === "contact" && <Contact />}
-        </div>
-      </div>
-    </div>
+      } />
+    </Routes>
   );
 }

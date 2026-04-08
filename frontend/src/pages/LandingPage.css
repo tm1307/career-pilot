@@ -5,19 +5,24 @@
   background: linear-gradient(135deg, #f5f8fc 0%, #eef2f7 100%);
   font-family: var(--font, "DM Sans", sans-serif);
   color: var(--text, #0f1e30);
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .landing-nav {
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 5%;
+  padding: 1rem 5%;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
+  z-index: 100;
+  background: rgba(245, 248, 252, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(15, 30, 48, 0.05);
 }
 
 .landing-brand {
